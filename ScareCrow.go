@@ -47,7 +47,7 @@ func options() *FlagOptions {
 	inputFile := flag.String("I", "", "Path to the raw 64-bit shellcode.")
 	console := flag.Bool("console", false, "Only for Binary Payloads - Generates verbose console information when the payload is executed. This will disable the hidden window feature.")
 	LoaderType := flag.String("Loader", "binary", `Sets the type of process that will sideload the malicious payload:
-[*] binary - Generates a binary based payload. (This type does not benefit from any sideloading)	
+[*] binary - Generates a binary based payload. (This type does not benefit from any sideloading)
 [*] control - Loads a hidden control applet - the process name would be rundll32 if -O is specified a JScript loader will be generated.
 [*] dll - Generates just a DLL file. Can be executed with commands such as rundll32 or regsvr32 with DllRegisterServer, DllGetClassObject as export functions.
 [*] excel - Loads into a hidden Excel process using a JScript loader.
@@ -56,7 +56,7 @@ func options() *FlagOptions {
 	URL := flag.String("url", "", "URL associated with the Delivery option to retrieve the payload. (e.g. https://acme.com/)")
 	CommandLoader := flag.String("delivery", "", `Generates a one-liner command to download and execute the payload remotely:
 [*] bits - Generates a Bitsadmin one liner command to download, execute and remove the loader (Compatible with Binary, Control, Excel, and Wscript Loaders).
-[*] hta - Generates a blank hta file containing the loader along with an MSHTA command to execute the loader remotely in the background (Compatible with Control and Excel Loaders). 
+[*] hta - Generates a blank hta file containing the loader along with an MSHTA command to execute the loader remotely in the background (Compatible with Control and Excel Loaders).
 [*] macro - Generates an office macro that will download and execute the loader remotely (Compatible with Control, Excel, and Wscript Loaders).`)
 	domain := flag.String("domain", "", "The domain name to use for creating a fake code signing cert. (e.g. www.acme.com) ")
 	exectype := flag.String("Exec", "RtlCopy", `Set the template to execute the shellcode:
@@ -105,9 +105,9 @@ func execute(opt *FlagOptions, name string) string {
 	}
 	if opt.LoaderType == "binary" {
 		if opt.obfuscate == true {
-			cmd = exec.Command(bin, "GOPRIVATE=*", "GOOS=windows", "GOARCH=amd64", "GOFLAGS=-ldflags=-s", "GOFLAGS=-ldflags=-w", "../.lib/garble", "-literals", "-seed=random", "build", "-o", ""+name+".exe")
+			cmd = exec.Command(bin, "GOPRIVATE=*", "GOOS=windows", "GOARCH=amd64", "GOFLAGS=-ldflags=-s", "GOFLAGS=-ldflags=-w -H=windowsgui ", "../.lib/garble", "-literals", "-seed=random", "build", "-o", ""+name+".exe")
 		} else {
-			cmd = exec.Command(bin, "GOPRIVATE=*", "GOOS=windows", "GOARCH=amd64", "GOFLAGS=-ldflags=-s", "GOFLAGS=-ldflags=-w", "go", "build", "-trimpath", "-ldflags=-w -s -buildid=", "-o", ""+name+".exe")
+			cmd = exec.Command(bin, "GOPRIVATE=*", "GOOS=windows", "GOARCH=amd64", "GOFLAGS=-ldflags=-s", "GOFLAGS=-ldflags=-w", "go", "build", "-trimpath", "-ldflags=-w -s -H=windowsgui -buildid=", "-o", ""+name+".exe")
 
 		}
 	} else {
@@ -153,15 +153,15 @@ func execute(opt *FlagOptions, name string) string {
 }
 
 func main() {
-	fmt.Println(` 
-  _________                           _________                       
+	fmt.Println(`
+  _________                           _________
  /   _____/ ____ _____ _______   ____ \_   ___ \_______  ______  _  __
  \_____  \_/ ___\\__  \\_  __ \_/ __ \/    \  \/\_  __ \/  _ \ \/ \/ /
- /        \  \___ / __ \|  | \/\  ___/\     \____|  | \(  <_> )     / 
-/_______  /\___  >____  /__|    \___  >\______  /|__|   \____/ \/\_/  
-	\/     \/     \/            \/        \/                      
+ /        \  \___ / __ \|  | \/\  ___/\     \____|  | \(  <_> )     /
+/_______  /\___  >____  /__|    \___  >\______  /|__|   \____/ \/\_/
+	\/     \/     \/            \/        \/
 							(@Tyl0us)
-	“Fear, you must understand is more than a mere obstacle. 
+	“Fear, you must understand is more than a mere obstacle.
 	Fear is a TEACHER. the first one you ever had.”
 	`)
 	Utils.Version()
